@@ -20,6 +20,15 @@ async function migrate() {
     `);
 
     await pool.query(`
+        CREATE TABLE IF NOT EXISTS admin (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(255) NOT NULL UNIQUE,
+          password TEXT NOT NULL
+        );
+      `);
+      
+
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS anak (
         id SERIAL PRIMARY KEY,
         nama VARCHAR(255) NOT NULL,
