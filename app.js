@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('./migrate'); // ← ini dia baris pentingnya
 const express = require('express');
 const cors = require('cors');
 
