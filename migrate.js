@@ -41,6 +41,28 @@ async function migrate() {
       );
     `);
 
+        await pool.query(`
+      CREATE TABLE IF NOT EXISTS status_anak (
+        id SERIAL PRIMARY KEY,
+        nama VARCHAR(255) NOT NULL,
+        jenis_kelamin VARCHAR(20) NOT NULL,
+        umur_bulan INT NOT NULL,
+        tinggi_badan FLOAT NOT NULL,
+        berat_badan FLOAT NOT NULL,
+        predicted_class INT,
+        label VARCHAR(50),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await pool.query(`
+      ALTER TABLE status_anak
+      ADD COLUMN IF NOT EXISTS nama_orang_tua VARCHAR(255),
+      ADD COLUMN IF NOT EXISTS alamat TEXT,
+      ADD COLUMN IF NOT EXISTS posyandu VARCHAR(100),
+      ADD COLUMN IF NOT EXISTS foto_url TEXT;
+    `);
+
     await pool.query(`
   CREATE TABLE IF NOT EXISTS riwayat_pemeriksaan (
     id SERIAL PRIMARY KEY,
@@ -64,27 +86,7 @@ async function migrate() {
     `);
 
 
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS status_anak (
-        id SERIAL PRIMARY KEY,
-        nama VARCHAR(255) NOT NULL,
-        jenis_kelamin VARCHAR(20) NOT NULL,
-        umur_bulan INT NOT NULL,
-        tinggi_badan FLOAT NOT NULL,
-        berat_badan FLOAT NOT NULL,
-        predicted_class INT,
-        label VARCHAR(50),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `);
 
-    await pool.query(`
-      ALTER TABLE status_anak
-      ADD COLUMN IF NOT EXISTS nama_orang_tua VARCHAR(255),
-      ADD COLUMN IF NOT EXISTS alamat TEXT,
-      ADD COLUMN IF NOT EXISTS posyandu VARCHAR(100),
-      ADD COLUMN IF NOT EXISTS foto_url TEXT;
-    `);
 
     console.log("✅ Semua migrasi dan penambahan kolom berhasil dijalankan.");
   } catch (err) {
