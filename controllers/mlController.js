@@ -4,7 +4,8 @@ let model = null;
 
 const loadModel = async () => {
   if (!model) {
-model = await tf.loadGraphModel('https://backend-stunting.onrender.com/public/ml-model/model.json');
+model = await tf.loadGraphModel('https://backend-stunting.onrender.com/public/ml-model/model/model.json');
+
     console.log('✅ ML model loaded');
   }
 };
