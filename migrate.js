@@ -54,6 +54,11 @@ async function migrate() {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
+await pool.query(`ALTER TABLE status_anak ADD COLUMN IF NOT EXISTS nama_orang_tua VARCHAR(255);`);
+await pool.query(`ALTER TABLE status_anak ADD COLUMN IF NOT EXISTS alamat TEXT;`);
+await pool.query(`ALTER TABLE status_anak ADD COLUMN IF NOT EXISTS posyandu VARCHAR(100);`);
+await pool.query(`ALTER TABLE status_anak ADD COLUMN IF NOT EXISTS foto_url TEXT;`);
+
 
     await pool.query(`
       ALTER TABLE status_anak

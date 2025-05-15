@@ -4,12 +4,17 @@ const {
   getAllStatusAnak,
   getAnakById // ⬅️ tambahkan ini!
 } = require('../controllers/anakController');
+const verifyToken = require('../middlewares/authMiddleware'); // ✅ import middleware
 
 const { updateAnakById } = require('../controllers/anakController');
 const { deleteAnakById } = require('../controllers/anakController');
-router.delete('/status-anak/:id', deleteAnakById);
-router.put('/status-anak/:id', updateAnakById);
-router.get('/status-anak', getAllStatusAnak);
-router.get('/status-anak/:id', getAnakById); // << ini endpoint barunya
+
+
+// ✅ Proteksi semua endpoint pakai token
+router.get('/status-anak', verifyToken, getAllStatusAnak);
+router.get('/status-anak/:id', verifyToken, getAnakById);
+router.put('/status-anak/:id', verifyToken, updateAnakById);
+router.delete('/status-anak/:id', verifyToken, deleteAnakById);
+
 
 module.exports = router;
