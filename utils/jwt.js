@@ -10,6 +10,6 @@ exports.generateToken = (payload) => {
 };
 
 exports.verifyToken = (token) => {
-  console.log('[DEBUG] Verifying with secret:', SECRET); // ⬅ Tambahan ini
+  console.log('[DEBUG] Verifying with secret:', SECRET); 
   return jwt.verify(token, SECRET);
 };
