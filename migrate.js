@@ -1,11 +1,13 @@
 // migrate.js
 require('dotenv').config();
 const { Pool } = require('pg');
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  // Jangan tambah ssl atau lainnya, cukup ini saja
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
-
 // const pool = new Pool({
 //   user: process.env.DB_USER,
 //   host: process.env.DB_HOST,
