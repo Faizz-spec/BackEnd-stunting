@@ -3,13 +3,12 @@ require('dotenv').config();
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: process.env.PGUSER,
-  host: process.env.PGHOST,
-  database: process.env.POSTGRES_DB,
-  password: process.env.PGPASSWORD,
-  port: process.env.DB_PORT,
-  ssl: false
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Railway tidak butuh sertifikat valid
+  }
 });
+
 
 // const pool = new Pool({
 //   user: process.env.DB_USER,
