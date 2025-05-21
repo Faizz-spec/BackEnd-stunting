@@ -4,10 +4,8 @@ let model = null;
 
 const loadModel = async () => {
   if (!model) {
-model = await tf.loadGraphModel('https://backend-stunting.onrender.com/public/ml-model/model/model.json');
-
+    model = await tf.loadGraphModel('https://backend-stunting.onrender.com/public/ml-model/model/model.json');
     // model = await tf.loadGraphModel('http://localhost:5000/public/ml-model/model/model.json');
-    
     console.log('✅ ML model loaded');
   }
 };
@@ -27,10 +25,21 @@ const predictData = async (req, res) => {
     const results = [];
 
     for (const item of inputList) {
-      const { nama, jenis_kelamin, umur_bulan, tinggi_badan, berat_badan } = item;
+      const {
+        nama,
+        jenis_kelamin,
+        umur_bulan,
+        tinggi_badan,
+        berat_badan,
+        alamat,
+        posyandu,
+        foto_url
+      } = item;
 
       if (!nama || !jenis_kelamin || umur_bulan == null || tinggi_badan == null || berat_badan == null) {
-        return res.status(400).json({ error: 'Field tidak lengkap. Harap isi nama, jenis_kelamin, umur_bulan, tinggi_badan, dan berat_badan.' });
+        return res.status(400).json({
+          error: 'Field tidak lengkap. Harap isi nama, jenis_kelamin, umur_bulan, tinggi_badan, dan berat_badan.'
+        });
       }
 
       const genderNumeric = jenis_kelamin.toLowerCase() === 'laki-laki' ? 1 : 0;
@@ -41,12 +50,23 @@ const predictData = async (req, res) => {
       const predictedClass = probabilities.indexOf(Math.max(...probabilities));
       const predictedLabel = labels[predictedClass];
 
-      // Simpan ke DB
+      // Simpan ke database termasuk field tambahan (nullable)
       await pool.query(`
         INSERT INTO status_anak 
-        (nama, jenis_kelamin, umur_bulan, tinggi_badan, berat_badan, predicted_class, label)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-      `, [nama, jenis_kelamin, umur_bulan, tinggi_badan, berat_badan, predictedClass, predictedLabel]);
+        (nama, jenis_kelamin, umur_bulan, tinggi_badan, berat_badan, predicted_class, label, alamat, posyandu, foto_url)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      `, [
+        nama,
+        jenis_kelamin,
+        umur_bulan,
+        tinggi_badan,
+        berat_badan,
+        predictedClass,
+        predictedLabel,
+        alamat ?? null,
+        posyandu ?? null,
+        foto_url ?? null
+      ]);
 
       results.push({
         nama,
@@ -55,7 +75,10 @@ const predictData = async (req, res) => {
         tinggi_badan,
         berat_badan,
         predicted_class: predictedClass,
-        label: predictedLabel
+        label: predictedLabel,
+        alamat: alamat ?? null,
+        posyandu: posyandu ?? null,
+        foto_url: foto_url ?? null
       });
     }
 
