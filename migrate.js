@@ -82,6 +82,16 @@ await pool.query(`ALTER TABLE status_anak ADD COLUMN IF NOT EXISTS foto_url TEXT
   );
 `);
 
+await pool.query(`
+  CREATE TABLE IF NOT EXISTS posyandu_profile (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER UNIQUE REFERENCES admin(id) ON DELETE CASCADE,
+    nama_posyandu VARCHAR(100),
+    alamat TEXT
+  );
+`);
+
+
     await pool.query(`
       CREATE TABLE IF NOT EXISTS posyandu_user (
         id SERIAL PRIMARY KEY,
@@ -91,6 +101,7 @@ await pool.query(`ALTER TABLE status_anak ADD COLUMN IF NOT EXISTS foto_url TEXT
         password TEXT NOT NULL
       );
     `);
+
 
 
 

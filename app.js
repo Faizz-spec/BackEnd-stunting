@@ -19,6 +19,8 @@ const docRoutes = require('./routes/docRoutes');
 app.use('/api', docRoutes);
 const statistikRoutes = require('./routes/statistikRoutes');
 app.use('/api', statistikRoutes);
+const profileRoutes = require('./routes/profileRoutes');
+app.use('/api/profile', profileRoutes);
 
 const mlRoutes = require('./routes/mlRoutes');
 app.use('/ml', mlRoutes); 

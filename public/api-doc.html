@@ -305,6 +305,36 @@
 
 
 
+<h1>🏥 5. Profil Posyandu</h1>
+
+<div class="endpoint">
+  <h2>1. POST <code>/api/profile</code></h2>
+  <p><strong>Deskripsi:</strong> Menyimpan data profil posyandu milik user yang login. Hanya bisa disimpan satu kali per user. Jika sudah ada, gunakan PUT untuk mengubah.</p>
+
+  <p><strong>Header:</strong></p>
+  <pre>Authorization: Bearer &lt;JWT_TOKEN_HERE&gt;</pre>
+
+  <h3>Request Body:</h3>
+  <pre>{
+  "nama_posyandu": "Posyandu Melati",
+  "alamat": "Jl. Merdeka No. 45, Banyuwangi"
+}</pre>
+
+  <h3>Response Sukses (201):</h3>
+  <pre>{
+  "message": "✅ Profil berhasil dibuat"
+}</pre>
+
+  <h3>Response Gagal (sudah ada profil):</h3>
+  <pre>{
+  "message": "Profil sudah ada, gunakan PUT untuk update"
+}</pre>
+
+  <h3>Response Gagal (token tidak valid):</h3>
+  <pre>{
+  "message": "Invalid token"
+}</pre>
+</div>
 
 
 
