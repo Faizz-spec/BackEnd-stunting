@@ -2,7 +2,7 @@ const tf = require('@tensorflow/tfjs');
 const pool = require('../config/database');
 let model = null;
 
-const MODEL_URL = 'http://localhost:5000/public/ml-model/model/model.json';
+const MODEL_URL = 'https://backend-stunting.onrender.com/public/ml-model/model/model.json';
 
 // Map gender dan label
 const GENDER_MAP = {
