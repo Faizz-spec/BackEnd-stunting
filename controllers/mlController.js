@@ -2,15 +2,32 @@ const tf = require('@tensorflow/tfjs');
 const pool = require('../config/database');
 let model = null;
 
+const MODEL_URL = 'http://localhost:5000/public/ml-model/model/model.json';
+
+// Map gender dan label
+const GENDER_MAP = {
+  'laki-laki': 0,
+  'perempuan': 1
+};
+
+const LABEL_MAP = {
+  0: 'Berpotensi Stunting',
+  1: 'Normal',
+  2: 'Stunting'
+};
+
+// Mean dan std (urutan: gender, umur, tinggi, berat)
+const mean = [0.5, 16, 75, 8];
+const std = [0.5, 4, 5, 1];
+
+const standardize = (val, mean, std) => (val - mean) / std;
+
 const loadModel = async () => {
   if (!model) {
-    model = await tf.loadGraphModel('https://backend-stunting.onrender.com/public/ml-model/model/model.json');
-    // model = await tf.loadGraphModel('http://localhost:5000/public/ml-model/model/model.json');
+    model = await tf.loadGraphModel(MODEL_URL);
     console.log('✅ ML model loaded');
   }
 };
-
-const labels = ['Berpotensi Stunting', 'Normal', 'Stunting'];
 
 const predictData = async (req, res) => {
   try {
@@ -42,15 +59,26 @@ const predictData = async (req, res) => {
         });
       }
 
-      const genderNumeric = jenis_kelamin.toLowerCase() === 'laki-laki' ? 1 : 0;
-      const inputArray = [tinggi_badan, berat_badan, umur_bulan, genderNumeric];
+      const genderLower = jenis_kelamin.toLowerCase();
+      const genderNumeric = GENDER_MAP[genderLower] ?? 0;
+
+      let inputArray = [genderNumeric, umur_bulan, tinggi_badan, berat_badan];
+      inputArray = inputArray.map((val, i) => standardize(val, mean[i], std[i]));
+
       const inputTensor = tf.tensor2d([inputArray], [1, 4]);
       const prediction = model.predict(inputTensor);
-      const probabilities = prediction.dataSync();
+      const probabilities = await prediction.data(); // ✅ pakai async
       const predictedClass = probabilities.indexOf(Math.max(...probabilities));
-      const predictedLabel = labels[predictedClass];
+      const predictedLabel = LABEL_MAP[predictedClass];
 
-      // Simpan ke database termasuk field tambahan (nullable)
+      // Debugging opsional
+      console.log('=====================');
+      console.log('👶 Nama:', nama);
+      console.log('🧠 Input Standardized:', inputArray);
+      console.log('📊 Probabilities:', probabilities);
+      console.log('✅ Predicted:', predictedLabel);
+      console.log('=====================');
+
       await pool.query(`
         INSERT INTO status_anak 
         (nama, jenis_kelamin, umur_bulan, tinggi_badan, berat_badan, predicted_class, label, alamat, posyandu, foto_url)
@@ -94,4 +122,3 @@ const predictData = async (req, res) => {
 };
 
 module.exports = { predictData };
-
