@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Aplikasi Explorer</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+    body { font-family: monospace; margin: 0; padding: 0; }
+    nav { background: #333; color: white; display: flex; gap: 1rem; padding: 1em; }
+    nav a { color: white; text-decoration: none; cursor: pointer; }
+    nav a:hover { text-decoration: underline; }
+    #content { padding: 1em; }
+    
+  </style>
+</head>
+<body>
+  <nav>
+    <a onclick="loadPage('home')">🏠 Beranda</a>
+    <a onclick="loadPage('lihat-file')">📁 Lihat File</a>
+    <a onclick="loadPage('database')">📊 Lihat Database</a>
+    <a onclick="loadPage('ngoding-AI')">🤖 NGoding AI</a>
+  </nav>
+  <div id="content">
+    <!-- Konten dinamis akan ditampilkan di sini -->
+    <h2>Selamat datang di Aplikasi Explorer</h2>
+    <p>Pilih menu di atas untuk mulai.</p>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

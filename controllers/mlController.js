@@ -10,7 +10,7 @@ const loadModel = async () => {
   }
 };
 
-const labels = ["Normal", "Stunted", "Severely Stunted"];
+const labels = ['Berpotensi Stunting', 'Normal', 'Stunting'];
 
 const predictData = async (req, res) => {
   try {
@@ -95,47 +95,3 @@ const predictData = async (req, res) => {
 
 module.exports = { predictData };
 
-
-// const tf = require('@tensorflow/tfjs');
-// let model = null;
-
-// const loadModel = async () => {
-//   if (!model) {
-//     model = await tf.loadGraphModel('http://localhost:5000/public/ml-model/model/model.json');
-//     console.log('✅ ML model loaded');
-//   }
-// };
-// const labels = [
-//   "Normal",               // class 0
-//   "Stunted",              // class 1
-//   "Severely Stunted"      // class 2
-// ];
-
-// const predictData = async (req, res) => {
-//   try {
-//     await loadModel();
-
-//     const inputArray = req.body.input;
-//     if (!Array.isArray(inputArray) || inputArray.length !== 4) {
-//       return res.status(400).json({ error: 'Input harus berupa array dengan 4 angka [tinggi, berat, umur, jenis_kelamin]' });
-//     }
-
-//     const inputTensor = tf.tensor2d([inputArray], [1, 4]); // shape [1, 4]
-//     const prediction = model.predict(inputTensor);
-//     const probabilities = prediction.dataSync(); // Float32Array
-//     const predictedClass = probabilities.indexOf(Math.max(...probabilities));
-//     const predictedLabel = labels[predictedClass];
-
-//     res.json({
-//       result: Array.from(probabilities),
-//       predicted_class: predictedClass,
-//       label: predictedLabel
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Gagal melakukan prediksi' });
-//   }
-// };
-
-
-// module.exports = { predictData };

@@ -1,0 +1,39 @@
+/* ========== WRAPPER FLEX 2 KOLOM ========== */
+.explorer-wrapper {
+  display: flex;
+  gap: 1.5rem;
+  height: calc(100vh - 80px);
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+/* ========== KIRI: SIDEBAR FOLDER ========== */
+#sidebar {
+  width: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1em;
+  background-color: #fff;
+}
+
+/* ========== KANAN: HASIL FILE ========== */
+#output-area {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1em;
+  background-color: #fff;
+}
+
+/* ========== FILE HASIL ========== */
+#hasil pre {
+  background: #f1f1f1;
+  padding: 1em;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 2em;
+}
