@@ -31,7 +31,7 @@ const getProfile = async (req, res) => {
 const createProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { nama_posyandu, alamat } = req.body;
+    const { nama_posyandu, alamat, foto_url, deskripsi } = req.body;
 
     // Cek apakah sudah ada profil
     const existing = await pool.query(
@@ -44,8 +44,9 @@ const createProfile = async (req, res) => {
 
     // Simpan profil baru
     await pool.query(
-      'INSERT INTO posyandu_profile (user_id, nama_posyandu, alamat) VALUES ($1, $2, $3)',
-      [userId, nama_posyandu, alamat]
+      `INSERT INTO posyandu_profile (user_id, nama_posyandu, alamat, foto_url, deskripsi)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [userId, nama_posyandu, alamat, foto_url, deskripsi]
     );
 
     res.status(201).json({ message: '✅ Profil berhasil dibuat' });
@@ -59,11 +60,13 @@ const createProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { nama_posyandu, alamat } = req.body;
+    const { nama_posyandu, alamat, foto_url, deskripsi } = req.body;
 
-    const result = await pool.query(
-      'UPDATE posyandu_profile SET nama_posyandu = $1, alamat = $2 WHERE user_id = $3',
-      [nama_posyandu, alamat, userId]
+    await pool.query(
+      `UPDATE posyandu_profile
+       SET nama_posyandu = $1, alamat = $2, foto_url = $3, deskripsi = $4
+       WHERE user_id = $5`,
+      [nama_posyandu, alamat, foto_url, deskripsi, userId]
     );
 
     res.json({ message: '✅ Profil berhasil diperbarui' });

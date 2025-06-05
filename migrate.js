@@ -90,6 +90,11 @@ await pool.query(`
     alamat TEXT
   );
 `);
+await pool.query(`
+  ALTER TABLE posyandu_profile
+  ADD COLUMN IF NOT EXISTS foto_url TEXT,
+  ADD COLUMN IF NOT EXISTS deskripsi TEXT;
+`);
 
 
     await pool.query(`
