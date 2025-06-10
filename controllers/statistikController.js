@@ -22,7 +22,16 @@ const getStatistik = async (req, res) => {
           "Severely Stunted": 0
         };
       }
-      statistik[tahun][label] = Number(jumlah);
+
+      // Mapping label ke key statistik
+      let keyStatistik = null;
+      if (label === "Normal") keyStatistik = "Normal";
+      else if (label === "Stunting") keyStatistik = "Stunted";
+      else if (label === "Berpotensi Stunting") keyStatistik = "Severely Stunted";
+
+      if (keyStatistik) {
+        statistik[tahun][keyStatistik] += Number(jumlah);
+      }
     });
 
     res.json({
